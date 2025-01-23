@@ -4,7 +4,6 @@ import pickle
 import numpy as np
 import abc
 import time
-import slurm
 
 
 class Slurm_runner(abc.ABC):
