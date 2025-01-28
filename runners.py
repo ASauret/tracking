@@ -73,7 +73,7 @@ class Injeff_runner_EBS(Slurm_runner):
         rot_ring = new_ring.rotate(idx_mk)
         idx_id04 = rot_ring.get_uint32_index('ID04')[0]
         varout, *_ = rot_ring.track(varin, nturns=1, refpts=idx_id04)
-        return np.squeeze(varout)
+        return np.squeeze(varout[:,:,0,0])
 
               
     def run(self, varin):
