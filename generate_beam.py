@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 mpl.rcParams.update({'font.size': 15})
 
-lattice_tl2 = at.load_lattice('./newtl2.mat')
+lattice_tl2 = at.load_lattice('/machfs/sauret/SharedCodes/tracking/newtl2.mat')
 
 twiin = {'beta': [6.73,5.21],
          'alpha': [-2.21,1.4775],
@@ -88,13 +88,11 @@ opt_beam = at.beam(1001, at.sigma_matrix(twiss_in=l_opt[0], emity=emit_y, emitx=
 #    opt_beam[i] += orbit_rev[1][0][i]
 
 
-
-
 beam_out, *_ = end_tl2.track(opt_beam, use_mp=True)
 beam_out_no, *_ = end_tl2.track(beam, use_mp=True)
 
-# with open('beam_opt2.pickle', 'wb') as f:
-#     pickle.dump(beam_out, f, pickle.HIGHEST_PROTOCOL)
+with open('beam_opt2.pickle', 'wb') as f:
+    pickle.dump(beam_out, f, pickle.HIGHEST_PROTOCOL)
 
 beam_out = np.squeeze(beam_out[:,:,0,0])
 beam_out_no = np.squeeze(beam_out_no[:,:,0,0])
