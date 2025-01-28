@@ -58,20 +58,22 @@ class Injeff_runner_EBS(Slurm_runner):
         super().__init__(all_varin)
 
     def track_idx(self, varin):
-        ring = at.load_lattice(self.ringpath)
-        with open(self.endtl2_path, 'rb') as f1:
-            end_tl2 = pickle.load(f1)
+        end_tl2 = at.load_lattice(self.endtl2_path, use='end_tl2')
         idx_nlk2 = end_tl2.get_uint32_index('NLK2')[0]
         idx_dr2 = end_tl2.get_uint32_index('DR_NLK2')[0]
         idx_nlk3 = end_tl2.get_uint32_index('NLK3')[0]
-        s_marker = 0.5*end_tl2[idx_nlk2].Length + end_tl2[idx_nlk2].Length + end_tl2[idx_nlk3].Length
-        ring = at.load_lattice('./injection_nlk_mb_qd3.mat', mat_key='ring')
+        s_marker = 0.5*end_tl2[idx_nlk2].Length + end_tl2[idx_dr2].Length + end_tl2[idx_nlk3].Length
+        ring = at.load_lattice(self.ringpath, mat_key='ring')
         ring.enable_6d()
         new_ring = ring.sbreak(break_s=s_marker)
         idx_mk = new_ring.get_uint32_index('sbreak')[0]
+        #idx_id04 = new_ring.get_uint32_index('ID04')[0]
+        #new_ring = new_ring[idx_mk:idx_id04]
+        #varout, *_ = new_ring.track(varin, nturns=1, refpts=idx_id04)
         rot_ring = new_ring.rotate(idx_mk)
         idx_id04 = rot_ring.get_uint32_index('ID04')[0]
-        return rot_ring.track(varin, nturns=1, refpts=idx_id04)
+        varout, *_ = rot_ring.track(varin, nturns=1, refpts=idx_id04)
+        return np.squeeze(varout)
 
               
     def run(self, varin):

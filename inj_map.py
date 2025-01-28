@@ -47,10 +47,20 @@ for i in range(len(x)):
         bi[1] += xp[j]
         all_beams_errors.append(bi)
 
-for k in range(len(all_beams_errors)):
-    all_beams_ft.append(track_idx(all_beams_errors[k], '/machfs/sauret/SharedCodes/tracking/injection_nlk_mb_qd3.mat', '/machfs/sauret/SharedCodes/tracking/end_tl2.pickle'))
+#for k in range(len(all_beams_errors)):
+#    all_beams_ft.append(track_idx(all_beams_errors[k], '/machfs/sauret/SharedCodes/tracking/injection_nlk_mb_qd3.mat', '/machfs/sauret/SharedCodes/tracking/end_tl2.pickle'))
 
-with open('/machfs/sauret/SharedCodes/tracking/beam_ft.pickle', 'wb') as ft:
-    pickle.dump(all_beams_ft, ft, pickle.HIGHEST_PROTOCOL)
+#with open('/machfs/sauret/SharedCodes/tracking/beam_ft.pickle', 'wb') as ft:
+#    pickle.dump(all_beams_ft, ft, pickle.HIGHEST_PROTOCOL)
+
+runner = runners.Injeff_runner_EBS(all_beams_errors, '/machfs/sauret/SharedCodes/tracking/injection_nlk_mb_qd3.mat', 
+                                   '/machfs/sauret/SharedCodes/tracking/end_tl2.mat', nturns)
+runner.slurm.clean()
+ie = np.array(runner.submit())
+runner.slurm.clean()
+
+ie = ie.reshape((len(x), len(xp))).T
+
+pickle.dump({'x':x, 'xp':xp, 'ie':ie}, open('data_EBS.pkl', 'wb'))
 
 

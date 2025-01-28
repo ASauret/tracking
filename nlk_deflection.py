@@ -15,6 +15,9 @@ with open('/machfs/sauret/SharedCodes/tracking/end_tl2.pickle', 'rb') as f1:
 
 rev_endtl2 = end_tl2.reverse(copy=True)
 
-orbit_nlk = rev_endtl2.find_orbit(refpts='DR_QF1', orbit=np.array([-8.0e-3,0,0,0,0,0]))
-print(orbit_nlk)
+idx_nlk = rev_endtl2.get_uint32_index('NLK*')
+_, o1 = rev_endtl2.find_orbit(refpts=idx_nlk, orbit=np.array([-8.0e-3,0,0,0,0,0]))
+_, o2 = rev_endtl2.find_orbit(refpts=idx_nlk+1, orbit=np.array([-8.0e-3,0,0,0,0,0]))
+print(o1.shape)
+print(o1[:, 1]-o2[:, 1])
 
