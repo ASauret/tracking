@@ -1,0 +1,6 @@
+# Compiled python
+*.pyc
+*.pyd
+
+# pycache
+__pycache__
