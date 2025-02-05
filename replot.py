@@ -1,21 +1,24 @@
 import pickle
 import matplotlib.pyplot as plt
 
-data = pickle.load(open('data.pkl', 'rb'))
+data = pickle.load(open('/machfs/sauret/data_EBS1_debug.pkl', 'rb'))
 
-x = data['k1']
-y = data["k2"]
+x = data['x']
+y = data["xp"]
 ie = data["ie"]
 
-print(ie)
-print(x)
-print(y)
-exit()
+# print(ie)
+# exit()
+# print(x.shape)
+# print('/n')
+# print(y.shape)
+# exit()
 
 fix, ax = plt.subplots()
 ax.contourf(x, y, ie, 50)
-CS = ax.contour(x, y, ie, levels=[0.9, 0.94, 0.98], colors='black')
+CS = ax.contour(x, y, ie, colors='black')
 ax.clabel(CS, colors='black')
-ax.set_xlabel(r"x' [rad]")
-ax.set_ylabel(r"k$_1$L [m$^{-1}$]")
+ax.set_xlabel(r"x [m]")
+ax.set_ylabel(r"xp [rad]")
+plt.tight_layout()
 plt.show()

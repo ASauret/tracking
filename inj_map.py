@@ -34,21 +34,21 @@ orbit_rev = rev_end_tl2.find_orbit(refpts=at.End, orbit=np.array([-8.0e-3,0,0,0,
 orbit_rev[1][0][1] *= -1
 # print(orbit_rev)
 
-nparts=10
+nparts=11
 opt_beam = at.beam(nparts, at.sigma_matrix(twiss_in=l_opt[0], emity=emit_y, emitx=emit_x, espread=e_spread, blength=blength),
                    orbit=orbit_rev[1][0])
 
-nturns = 10
-x = np.arange(-2e-3,2.25e-3,0.25e-3)
-xp = np.arange(-2e-3,2.25e-3,0.25e-3)
+nturns = 1000
+x = np.arange(-2e-3,5.25e-3,0.25e-3)
+xp = np.arange(-1e-3,1.25e-3,0.25e-3)
 xg,xpg = np.meshgrid(x,xp)
 all_beams_errors = []
-
 for i in range(len(x)):
     for j in range(len(xp)):
         bi = copy.deepcopy(opt_beam)
         bi[0] += x[i]
         bi[1] += xp[j]
+        _ = end_tl2.track(bi,nturns=1,in_place=True)
         all_beams_errors.append(bi)
 
 runner = runners.Injeff_runner_EBS(all_beams_errors, '/machfs/sauret/SharedCodes/tracking/injection_nlk_mb_qd3.mat', 
@@ -59,6 +59,6 @@ runner.slurm.clean()
 
 ie = ie.reshape((len(x), len(xp))).T
 
-pickle.dump({'x':x, 'xp':xp, 'ie':ie}, open('data_EBS.pkl', 'wb'))
+pickle.dump({'x':x, 'xp':xp, 'ie':ie}, open('data_EBS1_debug.pkl', 'wb'))
 
 
