@@ -41,7 +41,6 @@ opt_beam = at.beam(nparts, at.sigma_matrix(twiss_in=l_opt[0], emity=emit_y, emit
 nturns = 1000
 x = np.arange(-2e-3,5.25e-3,0.25e-3)
 xp = np.arange(-1e-3,1.25e-3,0.25e-3)
-xg,xpg = np.meshgrid(x,xp)
 all_beams_errors = []
 for i in range(len(x)):
     for j in range(len(xp)):
